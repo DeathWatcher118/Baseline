@@ -1,0 +1,36 @@
+# Dockerfile for Baseline Calculator Service ONLY
+# This builds only the baseline calculation functionality
+
+FROM python:3.14-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy ONLY baseline-related code
+COPY src/baseline/ ./src/baseline/
+COPY src/utils/ ./src/utils/
+COPY src/__init__.py ./src/
+COPY config.yaml .
+COPY .env.example .env
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+# Expose port for Cloud Run
+EXPOSE 8080
+
+# Run the baseline calculator
+CMD ["python", "-m", "src.baseline.calculator"]

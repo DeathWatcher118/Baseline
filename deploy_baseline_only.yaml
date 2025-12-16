@@ -1,0 +1,40 @@
+# Cloud Build configuration for Baseline Calculator ONLY
+# This deploys only the baseline calculation service, not the AI agent or other components
+
+steps:
+  # Build the container image for baseline calculator
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/baseline-calculator:latest'
+      - '-f'
+      - 'Dockerfile.baseline'
+      - '.'
+  
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/baseline-calculator:latest']
+  
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'baseline-calculator'
+      - '--image=gcr.io/$PROJECT_ID/baseline-calculator:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=2Gi'
+      - '--cpu=2'
+      - '--timeout=900'
+      - '--set-env-vars=GCP_PROJECT_ID=$PROJECT_ID,GCP_REGION=us-central1,PYTHONUNBUFFERED=1'
+
+images:
+  - 'gcr.io/$PROJECT_ID/baseline-calculator:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'N1_HIGHCPU_8'
