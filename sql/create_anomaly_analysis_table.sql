@@ -63,12 +63,8 @@ OPTIONS(
     labels=[("component", "ai_agent"), ("purpose", "anomaly_analysis")]
 );
 
--- Create indexes for common queries
-CREATE INDEX IF NOT EXISTS idx_anomaly_id 
-ON `ccibt-hack25ww7-730.hackaton.anomaly_analysis`(anomaly_id);
-
-CREATE INDEX IF NOT EXISTS idx_reviewed 
-ON `ccibt-hack25ww7-730.hackaton.anomaly_analysis`(is_false_positive);
+-- Note: BigQuery uses clustering instead of traditional indexes
+-- The table is already clustered by anomaly_type, severity, is_false_positive
 
 -- Create view for unreviewed anomalies
 CREATE OR REPLACE VIEW `ccibt-hack25ww7-730.hackaton.unreviewed_anomalies` AS
