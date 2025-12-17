@@ -9,23 +9,22 @@ This document provides a high-level overview of the system architecture for lead
 
 ```mermaid
 graph TB
-    subgraph "Data Source"
-        BQ[(BigQuery<br/>Workload Data)]
+    subgraph DS["Data Source"]
+        BQ[("BigQuery<br/>Workload Data")]
     end
 
-    subgraph "Intelligence Layer"
-        BA[Baseline Agent<br/>Establishes Normal Behavior]
-        ADA[Anomaly Detection Agents<br/>Identifies Issues]
-        IA[Insight Agent<br/>Analyzes Root Causes]
-        PA[Presentation Agent<br/>Formats Results]
+    subgraph IL["Intelligence Layer"]
+        BA["Baseline Agent<br/>Establishes Normal Behavior"]
+        ADA["Anomaly Detection Agents<br/>Identifies Issues"]
+        IA["Insight Agent<br/>Analyzes Root Causes"]
+        PA["Presentation Agent<br/>Formats Results"]
     end
 
-    subgraph "User Interface"
-        UI[Web Dashboard<br/>Anomaly Display | Configuration | Feedback]
-        NS[Notification System<br/>Alerts & Updates]
+    subgraph UI_Layer["User Interface"]
+        UI["Web Dashboard<br/>Display, Config, Feedback"]
+        NS["Notification System<br/>Alerts and Updates"]
     end
 
-    %% Data Flow
     BQ -->|Historical Data| BA
     BQ -->|Current Metrics| ADA
     BA -->|Baseline Stats| ADA
@@ -37,14 +36,13 @@ graph TB
     NS -->|Real-time Alerts| UI
     UI -->|User Feedback| BQ
 
-    %% Styling
-    classDef dataStyle fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
-    classDef agentStyle fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#000
-    classDef uiStyle fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px,color:#000
-    
-    class BQ dataStyle
-    class BA,ADA,IA,PA agentStyle
-    class UI,NS uiStyle
+    style BQ fill:#e1f5ff,stroke:#01579b,stroke-width:3px
+    style BA fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style ADA fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style IA fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style PA fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style UI fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    style NS fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
 ```
 
 ---
